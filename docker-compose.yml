@@ -6,10 +6,10 @@ services:
     expose:
       - 3000
     labels:
-      - "traefik.enable=true"
+      - 'traefik.enable=true'
       - traefik.http.routers.martaweb.rule=Host(`$DASHBOARD_HOST`)
-      - "traefik.http.routers.martaweb.entryPoints=web,websecure"
-      - "traefik.http.routers.martaweb.middlewares=secured-external"
+      - 'traefik.http.routers.martaweb.entryPoints=web,websecure'
+      - 'traefik.http.routers.martaweb.middlewares=secured-external'
       - traefik.http.services.martaweb.loadbalancer.server.port=$DASHBOARD_PORT
     networks:
       - traefik_network
