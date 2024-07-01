@@ -1,21 +1,29 @@
 {
-  "name": "keystone-app",
-  "version": "1.0.2",
-  "private": true,
-  "scripts": {
-    "dev": "keystone dev",
-    "start": "keystone start",
-    "build": "keystone build",
-    "postinstall": "keystone build --no-ui --frozen"
-  },
-  "dependencies": {
-    "@keystone-6/auth": "^7.0.0",
-    "@keystone-6/core": "^5.0.0",
-    "@keystone-6/fields-document": "^7.0.0",
-    "@keystone-ui/core": "^5.0.2",
-    "axios": "^1.7.2",
-    "pino": "^9.2.0",
-    "pino-http": "^10.1.0",
-    "typescript": "^4.9.5"
-  }
+	"name": "martagongora-cms",
+	"version": "1.0.2",
+	"private": true,
+	"scripts": {
+		"dev": "keystone dev",
+		"start": "keystone start",
+		"build": "keystone build",
+		"postinstall": "keystone build --no-ui --frozen",
+		"lint": "prettier --check . && eslint .",
+		"format": "prettier --write ."
+	},
+	"dependencies": {
+		"@keystone-6/auth": "^7.0.0",
+		"@keystone-6/core": "^5.0.0",
+		"@keystone-6/fields-document": "^7.0.0",
+		"@keystone-ui/core": "^5.0.2",
+		"axios": "^1.7.2",
+		"pino": "^9.2.0",
+		"pino-http": "^10.1.0",
+		"typescript": "^4.9.5"
+	},
+	"devDependencies": {
+		"@types/eslint": "8.56.0",
+		"eslint": "^8.56.0",
+		"eslint-config-prettier": "^9.1.0",
+		"prettier": "^3.1.1"
+	}
 }
