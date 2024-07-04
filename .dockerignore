@@ -3,3 +3,13 @@
 Dockerfile
 
 docker-compose.yml
+
+.keystone
+
+node_modules
+
+.vscode
+
+.eslint*
+
+.prettier*

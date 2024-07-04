@@ -1,17 +1,35 @@
-import type { Request, Response } from 'express';
+import type { Request, Response, NextFunction } from 'express';
 import Logger from '../../logger';
 import InstagramClient from '../../clients/InstagramClient';
+import { KeystoneContext } from '@keystone-6/core/types';
+import { ConfigurationRepository } from '../../repositories/ConfigurationRepository';
 
-export async function handleInstagramAuth(req: Request, res: Response) {
-	Logger.debug({ query: req.query }, 'Instagram code received');
+export function handleInstagramAuth(commonContext: KeystoneContext) {
+	return async (req: Request, res: Response, next: NextFunction) => {
+		try {
+			const context = await commonContext.withRequest(req, res);
 
-	const code = req.query.code;
+			const repository = new ConfigurationRepository(context);
 
-	const client = InstagramClient;
+			Logger.debug('Instagram code received');
 
-	const { accessToken, expiresAt } = await client.performAuthentication(code as string);
+			const code = req.query.code;
 
-	Logger.debug({ accessToken, expiresAt }, 'Instagram access token retrieved');
+			const client = InstagramClient;
 
-	res.send();
+			const { userId, accessToken, expiresAt } = await client.performAuthentication(code as string);
+
+			Logger.debug('Instagram access token retrieved');
+
+			await repository.createConfiguration('instagram', {
+				userId,
+				accessToken,
+				expiresAt
+			});
+
+			res.redirect('/instagram-setup');
+		} catch (error) {
+			next(error);
+		}
+	};
 }
