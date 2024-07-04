@@ -20,7 +20,9 @@ import { document } from '@keystone-6/fields-document';
 // the generated types from '.keystone/types'
 import type { Lists } from '.keystone/types';
 
-const sessionExists = ({ session }: { session?: unknown }) => !!session;
+const sessionExists = ({ session }: { session?: unknown }) => {
+	return session !== undefined;
+};
 
 export const lists: Lists = {
 	User: list({
@@ -152,10 +154,16 @@ export const lists: Lists = {
 		},
 		access: {
 			operation: {
-				query: sessionExists,
+				query: (args) => {
+					console.log('Querying Configuration', args.session);
+					const res = sessionExists(args);
+					console.log(res);
+
+					return res;
+				},
 				create: sessionExists,
 				update: sessionExists,
-				delete: () => false
+				delete: sessionExists
 			}
 		},
 		ui: {
