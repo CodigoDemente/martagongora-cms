@@ -9,7 +9,8 @@ export class ConfigurationRepository {
 		name: string
 	): Promise<Configuration<T>> {
 		const data = await this.context.query.Configuration.findOne({
-			where: { name }
+			where: { name },
+			query: 'name value'
 		});
 
 		if (!data) {
