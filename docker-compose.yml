@@ -1,10 +1,38 @@
 services:
+  # MARK: Database
+  marta_db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    expose:
+      - 5432
+    volumes:
+      - marta_db:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=$POSTGRES_DB
+      - POSTGRES_USER=$POSTGRES_USER
+      - POSTGRES_PASSWORD=$POSTGRES_PASSWORD
+    networks:
+      - marta_cms
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U $POSTGRES_USER -d $POSTGRES_DB']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+  # MARK: CMS
   admin:
     build:
       context: .
       dockerfile: Dockerfile
     expose:
       - 3000
+    environment:
+      - POSTGRES_USER=$POSTGRES_USER
+      - POSTGRES_PASSWORD=$POSTGRES_PASSWORD
+      - POSTGRES_DB=$POSTGRES_DB
+      - POSTGRES_HOST=$POSTGRES_HOST
+      - POSTGRES_PORT=$POSTGRES_PORT
+    depends_on:
+      - marta_db
     labels:
       - 'traefik.enable=true'
       - traefik.http.routers.martaweb.rule=Host(`$DASHBOARD_HOST`)
@@ -12,9 +40,15 @@ services:
       - 'traefik.http.routers.martaweb.middlewares=secured-external'
       - traefik.http.services.martaweb.loadbalancer.server.port=$DASHBOARD_PORT
     networks:
+      - marta_cms
       - traefik_network
+
+volumes:
+  marta_db:
 
 networks:
   traefik_network:
     external: true
     name: ${DEFAULT_NETWORK}
+  marta_cms:
+    external: false

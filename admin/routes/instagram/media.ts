@@ -8,14 +8,11 @@ import InstagramClient from '../../clients/InstagramClient';
 export function getInstagramMedia(commonContext: KeystoneContext) {
 	return async (req: Request, res: Response, next: NextFunction) => {
 		try {
-			const context = await commonContext.withRequest(req, res);
+			const context = (await commonContext.withRequest(req, res)).sudo();
 
 			const repository = new ConfigurationRepository(context);
 
-			const configuration = await repository.getConfiguration<InstagramCredentials>(
-				'instagram',
-				true
-			);
+			const configuration = await repository.getConfiguration<InstagramCredentials>('instagram');
 
 			configuration.value.expiresAt = new Date(configuration.value.expiresAt);
 

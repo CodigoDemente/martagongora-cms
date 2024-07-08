@@ -6,54 +6,27 @@ export class ConfigurationRepository {
 	constructor(private readonly context: KeystoneContext) {}
 
 	public async getConfiguration<T extends Record<string, unknown>>(
-		name: string,
-		internal: boolean = false
+		name: string
 	): Promise<Configuration<T>> {
-		let finalData: Configuration<T>;
+		const data = await this.context.query.Configuration.findOne({
+			where: { name },
+			query: 'name value'
+		});
 
-		if (internal) {
-			const data = await this.context.prisma.configuration.findUnique({
-				where: { name }
-			});
-
-			if (!data) {
-				throw new ConfigurationNotFound(name);
-			}
-
-			const parsedValue: T = JSON.parse(data.value as string);
-
-			finalData = {
-				name: data.name,
-				value: parsedValue
-			};
-		} else {
-			const data = await this.context.query.Configuration.findOne({
-				where: { name }
-			});
-
-			if (!data) {
-				throw new ConfigurationNotFound(name);
-			}
-
-			finalData = {
-				name: data.name,
-				value: data.value as T
-			};
+		if (!data) {
+			throw new ConfigurationNotFound(name);
 		}
 
-		return finalData;
+		return {
+			name: data.name,
+			value: data.value as T
+		};
 	}
 
-	public async deleteConfiguration(name: string, internal: boolean = false): Promise<void> {
-		if (internal) {
-			await this.context.prisma.configuration.delete({
-				where: { name }
-			});
-		} else {
-			await this.context.query.Configuration.deleteOne({
-				where: { name }
-			});
-		}
+	public async deleteConfiguration(name: string): Promise<void> {
+		await this.context.query.Configuration.deleteOne({
+			where: { name }
+		});
 	}
 
 	public async createConfiguration<T extends Record<string, unknown>>(
