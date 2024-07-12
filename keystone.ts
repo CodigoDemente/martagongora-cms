@@ -14,6 +14,10 @@ export default withAuth(
 		lists,
 		session,
 		server: {
+			cors: {
+				origin: process.env.ORIGIN_URL || true
+			},
+			port: parseInt(process.env.DASHBOARD_PORT || '3000'),
 			extendExpressApp: expressApp
 		},
 		ui: {
