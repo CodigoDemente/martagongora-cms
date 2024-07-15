@@ -26,11 +26,10 @@ async function unlinkInstagram() {
 		}
 
 		return true;
-	} catch (error) {
+	} catch (_) {
 		return false;
 	}
 }
-
 
 function InstagramButton({ configExists, onUnlink }: InstagramButtonProps) {
 	if (!configExists) {
@@ -43,19 +42,19 @@ function InstagramButton({ configExists, onUnlink }: InstagramButtonProps) {
 		);
 	} else {
 		return (
-			<Button tone='negative' onClick={
-				async () => {
+			<Button
+				tone="negative"
+				onClick={async () => {
 					const success = await unlinkInstagram();
 
 					if (success) {
 						onUnlink();
 					}
-				}
-			}>
+				}}
+			>
 				Desvincular
 			</Button>
 		);
-	
 	}
 }
 
@@ -78,8 +77,11 @@ export default function InstagramSetupPage() {
 
 	return (
 		<PageContainer header={<Heading type="h3">Configurar Instagram</Heading>}>
-			<p>Aquí puedes gestionar la vinculación de tu instagram para que aparezcan tus publicaciones en la web.</p>
-			<InstagramButton configExists={configExists} onUnlink={() => setConfigExists(false)}/>
+			<p>
+				Aquí puedes gestionar la vinculación de tu instagram para que aparezcan tus publicaciones en
+				la web.
+			</p>
+			<InstagramButton configExists={configExists} onUnlink={() => setConfigExists(false)} />
 		</PageContainer>
 	);
 }

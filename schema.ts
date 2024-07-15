@@ -1,5 +1,4 @@
 import { list } from '@keystone-6/core';
-import { allowAll } from '@keystone-6/core/access';
 
 import { text, password, timestamp, json } from '@keystone-6/core/fields';
 
@@ -11,7 +10,19 @@ const sessionExists = ({ session }: { session?: unknown }) => {
 
 export const lists: Lists = {
 	User: list({
-		access: allowAll,
+		access: {
+			operation: {
+				query: sessionExists,
+				create: sessionExists,
+				update: sessionExists,
+				delete: sessionExists
+			}
+		},
+		ui: {
+			label: 'Usuarios',
+			singular: 'Usuario',
+			plural: 'Usuarios'
+		},
 
 		// this is the fields for our User list
 		fields: {
@@ -76,4 +87,38 @@ export const lists: Lists = {
 			isHidden: true
 		}
 	})
+
+	// Language: list({
+	// 	access: {
+	// 		operation: {
+	// 			query: allowAll,
+	// 			create: sessionExists,
+	// 			update: sessionExists,
+	// 			delete: sessionExists
+	// 		}
+	// 	},
+
+	// 	ui: {
+	// 		label: 'Idiomas',
+	// 		singular: 'Idioma',
+	// 		plural: 'Idiomas'
+	// 	},
+
+	// 	fields: {
+	// 		name: text({
+	// 			validation: {
+	// 				isRequired: true,
+	// 				length: { max: 100 }
+	// 			}
+	// 		}),
+
+	// 		code: select({
+	// 			isIndexed: 'unique'
+	// 		}),
+
+	// 		createdAt: timestamp({
+	// 			defaultValue: { kind: 'now' }
+	// 		})
+	// 	}
+	// })
 };
