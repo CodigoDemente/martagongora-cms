@@ -1,11 +1,19 @@
-FROM node:18.17.0-alpine
+FROM node:18.18.0-slim AS base
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+RUN corepack enable
+COPY . /app
 WORKDIR /app
-COPY package*.json .
-RUN npm install --ignore-scripts
 
-COPY . .
-RUN npm install
-RUN npm run build
+FROM base AS prod-deps
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --prod --frozen-lockfile --ignore-scripts
 
+FROM base AS build
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
+RUN pnpm run build
+
+FROM base
+COPY --from=prod-deps /app/node_modules /app/node_modules
+COPY --from=build /app/.keystone /app/.keystone
 EXPOSE 3000
-CMD ["npm", "run", "start"]
+CMD [ "pnpm", "start" ]
