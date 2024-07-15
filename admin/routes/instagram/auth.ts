@@ -29,6 +29,7 @@ export function handleInstagramAuth(commonContext: KeystoneContext) {
 
 			res.redirect('/instagram-setup');
 		} catch (error) {
+			Logger.error(error, 'Error while handling Instagram auth');
 			next(error);
 		}
 	};
