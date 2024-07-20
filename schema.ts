@@ -1,8 +1,13 @@
 import { list } from '@keystone-6/core';
 
-import { text, password, timestamp, json } from '@keystone-6/core/fields';
+import { text, password, timestamp, json, select, checkbox } from '@keystone-6/core/fields';
+
+import { allowAll } from '@keystone-6/core/access';
+
+import codes from 'iso-language-codes';
 
 import type { Lists } from '.keystone/types';
+import validateHook from './admin/server/hooks/Translations/validateHook';
 
 const sessionExists = ({ session }: { session?: unknown }) => {
 	return session !== undefined;
@@ -71,13 +76,7 @@ export const lists: Lists = {
 		},
 		access: {
 			operation: {
-				query: (args) => {
-					console.log('Querying Configuration', args.session);
-					const res = sessionExists(args);
-					console.log(res);
-
-					return res;
-				},
+				query: sessionExists,
 				create: sessionExists,
 				update: sessionExists,
 				delete: sessionExists
@@ -86,39 +85,132 @@ export const lists: Lists = {
 		ui: {
 			isHidden: true
 		}
+	}),
+
+	Language: list({
+		access: {
+			operation: {
+				query: allowAll,
+				create: sessionExists,
+				update: sessionExists,
+				delete: sessionExists
+			}
+		},
+
+		ui: {
+			label: 'Idiomas',
+			singular: 'Idioma',
+			plural: 'Idiomas'
+		},
+
+		fields: {
+			code: select({
+				type: 'enum',
+				isIndexed: 'unique',
+				options: codes.map((code) => ({
+					label: code.name,
+					value: code.iso639_1
+				})),
+				isFilterable: true,
+				validation: {
+					isRequired: true
+				},
+				ui: {
+					itemView: { fieldMode: 'read' },
+					listView: { fieldMode: 'read' }
+				},
+				label: 'Idioma'
+			}),
+
+			enabled: checkbox({
+				label: 'Habilitado'
+			}),
+
+			isDefault: checkbox({
+				label: 'Idioma por defecto'
+			}),
+
+			createdAt: timestamp({
+				defaultValue: { kind: 'now' },
+				ui: {
+					createView: { fieldMode: 'hidden' },
+					itemView: { fieldMode: 'read' },
+					listView: { fieldMode: 'read' }
+				}
+			})
+		}
+	}),
+
+	Translation: list({
+		fields: {
+			language: text({
+				validation: {
+					length: { min: 2, max: 2 }
+				},
+				isIndexed: true
+			}),
+			key: text({
+				validation: {
+					isRequired: true
+				},
+				isIndexed: true
+			}),
+			value: text({
+				validation: {
+					isRequired: true
+				}
+			}),
+			compoundKey: text({
+				isIndexed: 'unique',
+				ui: {
+					createView: { fieldMode: 'hidden' },
+					itemView: { fieldMode: 'read' },
+					listView: { fieldMode: 'hidden' }
+				},
+				graphql: {
+					omit: {
+						create: true,
+						update: true
+					}
+				}
+			})
+		},
+		hooks: {
+			resolveInput: ({ item, resolvedData }) => {
+				const language = resolvedData.language || item?.language;
+				const key = resolvedData.key || item?.key;
+
+				return {
+					...resolvedData,
+					compoundKey: `${key}-${language}`
+				};
+			},
+			validate: {
+				create: validateHook,
+				update: validateHook
+			}
+		},
+		access: {
+			operation: {
+				query: allowAll,
+				create: sessionExists,
+				update: sessionExists,
+				delete: sessionExists
+			}
+		},
+		ui: {
+			isHidden: true,
+			hideCreate: true,
+			hideDelete: true,
+			createView: {
+				defaultFieldMode: 'hidden'
+			},
+			listView: {
+				defaultFieldMode: 'hidden'
+			},
+			itemView: {
+				defaultFieldMode: 'hidden'
+			}
+		}
 	})
-
-	// Language: list({
-	// 	access: {
-	// 		operation: {
-	// 			query: allowAll,
-	// 			create: sessionExists,
-	// 			update: sessionExists,
-	// 			delete: sessionExists
-	// 		}
-	// 	},
-
-	// 	ui: {
-	// 		label: 'Idiomas',
-	// 		singular: 'Idioma',
-	// 		plural: 'Idiomas'
-	// 	},
-
-	// 	fields: {
-	// 		name: text({
-	// 			validation: {
-	// 				isRequired: true,
-	// 				length: { max: 100 }
-	// 			}
-	// 		}),
-
-	// 		code: select({
-	// 			isIndexed: 'unique'
-	// 		}),
-
-	// 		createdAt: timestamp({
-	// 			defaultValue: { kind: 'now' }
-	// 		})
-	// 	}
-	// })
 };

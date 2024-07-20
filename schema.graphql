@@ -156,6 +156,305 @@ input ConfigurationCreateInput {
   value: JSON
 }
 
+type Language {
+  id: ID!
+  code: LanguageCodeType
+  enabled: Boolean
+  isDefault: Boolean
+  createdAt: DateTime
+}
+
+enum LanguageCodeType {
+  sr
+  ro
+  ii
+  ty
+  tl
+  yi
+  ak
+  ms
+  ar
+  no
+  oj
+  ff
+  fa
+  sq
+  ay
+  az
+  zh
+  cr
+  et
+  gn
+  ik
+  iu
+  kr
+  kv
+  kg
+  ku
+  lv
+  mg
+  mn
+  om
+  ps
+  qu
+  sc
+  sw
+  uz
+  za
+  bi
+  nb
+  nn
+  id
+  tw
+  eo
+  ia
+  ie
+  io
+  vo
+  bh
+  he
+  sa
+  cu
+  pi
+  ae
+  la
+  hy
+  ss
+  bo
+  nr
+  sl
+  or
+  nd
+  na
+  mi
+  mr
+  lu
+  rn
+  km
+  fy
+  bn
+  av
+  ab
+  aa
+  af
+  am
+  an
+  as
+  bm
+  ba
+  eu
+  be
+  bs
+  br
+  bg
+  my
+  ca
+  ch
+  ce
+  ny
+  cv
+  kw
+  co
+  hr
+  cs
+  da
+  dv
+  nl
+  dz
+  en
+  ee
+  fo
+  fj
+  fi
+  fr
+  gl
+  ka
+  de
+  el
+  gu
+  ht
+  ha
+  hz
+  hi
+  ho
+  hu
+  ga
+  ig
+  is
+  it
+  ja
+  jv
+  kl
+  kn
+  ks
+  kk
+  ki
+  rw
+  ky
+  ko
+  kj
+  lb
+  lg
+  li
+  ln
+  lo
+  lt
+  gv
+  mk
+  ml
+  mt
+  mh
+  nv
+  ne
+  ng
+  oc
+  os
+  pa
+  pl
+  pt
+  rm
+  ru
+  sd
+  se
+  sm
+  sg
+  gd
+  sn
+  si
+  sk
+  so
+  st
+  es
+  su
+  sv
+  ta
+  te
+  tg
+  th
+  ti
+  tk
+  tn
+  to
+  tr
+  ts
+  tt
+  ug
+  uk
+  ur
+  ve
+  vi
+  wa
+  cy
+  wo
+  xh
+  yo
+  zu
+}
+
+input LanguageWhereUniqueInput {
+  id: ID
+  code: LanguageCodeType
+}
+
+input LanguageWhereInput {
+  AND: [LanguageWhereInput!]
+  OR: [LanguageWhereInput!]
+  NOT: [LanguageWhereInput!]
+  id: IDFilter
+  code: LanguageCodeTypeNullableFilter
+  enabled: BooleanFilter
+  isDefault: BooleanFilter
+  createdAt: DateTimeNullableFilter
+}
+
+input LanguageCodeTypeNullableFilter {
+  equals: LanguageCodeType
+  in: [LanguageCodeType!]
+  notIn: [LanguageCodeType!]
+  not: LanguageCodeTypeNullableFilter
+}
+
+input BooleanFilter {
+  equals: Boolean
+  not: BooleanFilter
+}
+
+input LanguageOrderByInput {
+  id: OrderDirection
+  code: OrderDirection
+  enabled: OrderDirection
+  isDefault: OrderDirection
+  createdAt: OrderDirection
+}
+
+input LanguageUpdateInput {
+  code: LanguageCodeType
+  enabled: Boolean
+  isDefault: Boolean
+  createdAt: DateTime
+}
+
+input LanguageUpdateArgs {
+  where: LanguageWhereUniqueInput!
+  data: LanguageUpdateInput!
+}
+
+input LanguageCreateInput {
+  code: LanguageCodeType
+  enabled: Boolean
+  isDefault: Boolean
+  createdAt: DateTime
+}
+
+type Translation {
+  id: ID!
+  language: String
+  key: String
+  value: String
+  compoundKey: String
+}
+
+input TranslationWhereUniqueInput {
+  id: ID
+  compoundKey: String
+}
+
+input TranslationWhereInput {
+  AND: [TranslationWhereInput!]
+  OR: [TranslationWhereInput!]
+  NOT: [TranslationWhereInput!]
+  id: IDFilter
+  language: StringFilter
+  key: StringFilter
+  value: StringFilter
+  compoundKey: StringFilter
+}
+
+input TranslationOrderByInput {
+  id: OrderDirection
+  language: OrderDirection
+  key: OrderDirection
+  value: OrderDirection
+  compoundKey: OrderDirection
+}
+
+input TranslationUpdateInput {
+  language: String
+  key: String
+  value: String
+}
+
+input TranslationUpdateArgs {
+  where: TranslationWhereUniqueInput!
+  data: TranslationUpdateInput!
+}
+
+input TranslationCreateInput {
+  language: String
+  key: String
+  value: String
+}
+
 """
 The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
 """
@@ -174,6 +473,18 @@ type Mutation {
   updateConfigurations(data: [ConfigurationUpdateArgs!]!): [Configuration]
   deleteConfiguration(where: ConfigurationWhereUniqueInput!): Configuration
   deleteConfigurations(where: [ConfigurationWhereUniqueInput!]!): [Configuration]
+  createLanguage(data: LanguageCreateInput!): Language
+  createLanguages(data: [LanguageCreateInput!]!): [Language]
+  updateLanguage(where: LanguageWhereUniqueInput!, data: LanguageUpdateInput!): Language
+  updateLanguages(data: [LanguageUpdateArgs!]!): [Language]
+  deleteLanguage(where: LanguageWhereUniqueInput!): Language
+  deleteLanguages(where: [LanguageWhereUniqueInput!]!): [Language]
+  createTranslation(data: TranslationCreateInput!): Translation
+  createTranslations(data: [TranslationCreateInput!]!): [Translation]
+  updateTranslation(where: TranslationWhereUniqueInput!, data: TranslationUpdateInput!): Translation
+  updateTranslations(data: [TranslationUpdateArgs!]!): [Translation]
+  deleteTranslation(where: TranslationWhereUniqueInput!): Translation
+  deleteTranslations(where: [TranslationWhereUniqueInput!]!): [Translation]
   endSession: Boolean!
   authenticateUserWithPassword(email: String!, password: String!): UserAuthenticationWithPasswordResult
   createInitialUser(data: CreateInitialUserInput!): UserAuthenticationWithPasswordSuccess!
@@ -203,6 +514,12 @@ type Query {
   configurations(where: ConfigurationWhereInput! = {}, orderBy: [ConfigurationOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ConfigurationWhereUniqueInput): [Configuration!]
   configuration(where: ConfigurationWhereUniqueInput!): Configuration
   configurationsCount(where: ConfigurationWhereInput! = {}): Int
+  languages(where: LanguageWhereInput! = {}, orderBy: [LanguageOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: LanguageWhereUniqueInput): [Language!]
+  language(where: LanguageWhereUniqueInput!): Language
+  languagesCount(where: LanguageWhereInput! = {}): Int
+  translations(where: TranslationWhereInput! = {}, orderBy: [TranslationOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: TranslationWhereUniqueInput): [Translation!]
+  translation(where: TranslationWhereUniqueInput!): Translation
+  translationsCount(where: TranslationWhereInput! = {}): Int
   keystone: KeystoneMeta!
   authenticatedItem: AuthenticatedItem
 }

@@ -4,10 +4,10 @@ import {
 	InstagramAPIMediaResponse,
 	InstagramCredentials,
 	InstagramMedia
-} from '../types/instagram';
-import logger from '../logger';
-import { InvalidInstagramCode } from '../errors/InvalidInstagramCode';
-import { InstagramNotAuthenticatedError } from '../errors/InstagramNotAuthenticatedError';
+} from '../server/types/instagram';
+import logger from '../server/logger';
+import { InvalidInstagramCode } from '../server/errors/InvalidInstagramCode';
+import { InstagramNotAuthenticatedError } from '../server/errors/InstagramNotAuthenticatedError';
 
 class InstagramClient {
 	private httpClient: Axios;
