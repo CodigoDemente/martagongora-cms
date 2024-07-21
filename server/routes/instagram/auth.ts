@@ -1,8 +1,8 @@
 import type { Request, Response, NextFunction } from 'express';
 import { KeystoneContext } from '@keystone-6/core/types';
 import { ConfigurationRepository } from '../../repositories/ConfigurationRepository';
-import Logger from '../../logger';
-import InstagramClient from '../../../clients/InstagramClient';
+import Logger from '../../Logger';
+import InstagramClient from '../../../admin/clients/InstagramClient';
 
 export function handleInstagramAuth(commonContext: KeystoneContext) {
 	return async (req: Request, res: Response, next: NextFunction) => {

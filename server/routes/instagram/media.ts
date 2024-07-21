@@ -1,7 +1,7 @@
 import { KeystoneContext } from '@keystone-6/core/types';
 import type { Request, Response, NextFunction } from 'express';
 import { ConfigurationRepository } from '../../repositories/ConfigurationRepository';
-import InstagramClient from '../../../clients/InstagramClient';
+import InstagramClient from '../../../admin/clients/InstagramClient';
 import { InstagramNotAuthenticatedError } from '../../errors/InstagramNotAuthenticatedError';
 import { InstagramCredentials } from '../../types/instagram';
 

@@ -13,6 +13,7 @@ export default function CustomToolbar(props: CustomToolbarProps) {
 		const newRow: Row = {
 			id,
 			key: '',
+			identifiers: {},
 			isNew: true
 		};
 

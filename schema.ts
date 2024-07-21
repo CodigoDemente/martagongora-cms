@@ -7,7 +7,7 @@ import { allowAll } from '@keystone-6/core/access';
 import codes from 'iso-language-codes';
 
 import type { Lists } from '.keystone/types';
-import validateHook from './admin/server/hooks/Translations/validateHook';
+import validateHook from './server/hooks/Translations/validateHook';
 
 const sessionExists = ({ session }: { session?: unknown }) => {
 	return session !== undefined;

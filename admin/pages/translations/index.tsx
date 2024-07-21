@@ -47,9 +47,15 @@ export default function TranslationsPage() {
 
 	useEffect(() => {
 		setRows(() => toRows(translationsData?.translations || []));
+	}, [translationsData]);
+
+	useEffect(() => {
 		setLoading(() => translationsLoading);
+	}, [translationsLoading]);
+
+	useEffect(() => {
 		setError(() => translationsError || null);
-	}, [translationsData, translationsLoading, translationsError]);
+	}, [translationsError]);
 
 	function renderTable() {
 		if (error) {

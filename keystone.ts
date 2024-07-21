@@ -5,7 +5,7 @@ import { config as dotenv } from 'dotenv';
 import { lists } from './schema';
 
 import { withAuth, session } from './auth';
-import expressApp from './admin/server/express';
+import expressApp from './server/express';
 
 dotenv();
 

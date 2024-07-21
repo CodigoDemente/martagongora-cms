@@ -4,6 +4,7 @@ import pino from 'pino-http';
 import { HandleErrors } from './middlewares/ErrorHandler';
 import instagramRouter from './routes/instagram/router';
 import configurationRouter from './routes/configuration/router';
+import translationsRouter from './routes/translations/router';
 
 export default function expressApp(app: Express, context: KeystoneContext<BaseKeystoneTypeInfo>) {
 	app.use(pino());
@@ -11,6 +12,8 @@ export default function expressApp(app: Express, context: KeystoneContext<BaseKe
 	app.use('/configuration', configurationRouter(context));
 
 	app.use('/instagram', instagramRouter(context));
+
+	app.use('/translation', translationsRouter(context));
 
 	app.use(HandleErrors);
 }

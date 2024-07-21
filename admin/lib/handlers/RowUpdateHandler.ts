@@ -1,5 +1,5 @@
 import { GridRowModel } from '@mui/x-data-grid';
-import { Row, RowUpdateHandlerProps } from '../types';
+import { Row, RowUpdateHandlerProps, Translation } from '../types';
 import { ApolloError, GraphQLErrors } from '@apollo/client/errors';
 
 const UNIQUE_CONSTRAINT_FAILED = 'unique constraint failed';
@@ -7,7 +7,7 @@ const UNIQUE_CONSTRAINT_FAILED = 'unique constraint failed';
 export function handleRowUpdate(props: RowUpdateHandlerProps) {
 	const { setSnackbar, languages, createTranslations, updateTranslations, setRows } = props;
 
-	return async (newRow: GridRowModel<Row>) => {
+	return async (newRow: GridRowModel<Row>, oldRow: GridRowModel<Row>) => {
 		if (!newRow.key) {
 			setSnackbar({
 				children: 'El identificador es obligatorio',
@@ -26,16 +26,39 @@ export function handleRowUpdate(props: RowUpdateHandlerProps) {
 
 		try {
 			let errors: GraphQLErrors | undefined;
-			if (newRow.isNew) {
-				const translations = languages.map((language) => ({
-					language: language.code,
-					key: newRow.key,
-					value: newRow[language.code] || ''
-				}));
 
+			const translationsToCreate: Omit<Translation, 'id'>[] = [];
+			const translationsToUpdate: { where: { id: string }; data: Omit<Translation, 'id'> }[] = [];
+
+			languages.forEach((language) => {
+				const newValue = newRow[language.code] as string;
+				const oldValue = oldRow[language.code] as string;
+				const identifier = newRow.identifiers[language.code];
+
+				if (newValue) {
+					if (identifier && newValue !== oldValue) {
+						translationsToUpdate.push({
+							where: { id: identifier },
+							data: {
+								language: language.code,
+								key: newRow.key,
+								value: newValue
+							}
+						});
+					} else if (!identifier) {
+						translationsToCreate.push({
+							language: language.code,
+							key: newRow.key,
+							value: newValue
+						});
+					}
+				}
+			});
+
+			if (translationsToCreate.length) {
 				const { data, errors: createErrors } = await createTranslations({
 					variables: {
-						input: translations
+						input: translationsToCreate
 					}
 				});
 
@@ -47,19 +70,12 @@ export function handleRowUpdate(props: RowUpdateHandlerProps) {
 				}
 
 				errors = createErrors;
-			} else {
-				const translations = languages.map((language) => ({
-					where: { id: newRow.identifiers[language.code] },
-					data: {
-						language: language.code,
-						key: newRow.key,
-						value: newRow[language.code] || ''
-					}
-				}));
+			}
 
+			if (translationsToUpdate.length) {
 				const { errors: updateErrors } = await updateTranslations({
 					variables: {
-						input: translations
+						input: translationsToUpdate
 					}
 				});
 				errors = updateErrors;
