@@ -7,6 +7,7 @@ export function CustomNavigation({ lists, authenticatedItem }: NavigationProps) 
 		<NavigationContainer authenticatedItem={authenticatedItem}>
 			<NavItem href="/">Dashboard</NavItem>
 			<ListNavItems lists={lists} />
+			<NavItem href="/translations">Traducciones</NavItem>
 			<NavItem href="/instagram-setup">Configurar Instagram</NavItem>
 		</NavigationContainer>
 	);

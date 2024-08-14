@@ -1,9 +1,9 @@
 import { KeystoneContext } from '@keystone-6/core/types';
 import type { Request, Response, NextFunction } from 'express';
 import { ConfigurationRepository } from '../../repositories/ConfigurationRepository';
+import InstagramClient from '../../../admin/clients/InstagramClient';
 import { InstagramNotAuthenticatedError } from '../../errors/InstagramNotAuthenticatedError';
 import { InstagramCredentials } from '../../types/instagram';
-import InstagramClient from '../../clients/InstagramClient';
 
 export function getInstagramMedia(commonContext: KeystoneContext) {
 	return async (req: Request, res: Response, next: NextFunction) => {
