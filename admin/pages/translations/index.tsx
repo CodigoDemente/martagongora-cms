@@ -95,6 +95,8 @@ export default function TranslationsPage() {
 						<strong>&lt;br&gt;</strong> para incluir un salto de línea
 					</li>
 				</ul>
+				Para más información consulta{' '}
+				<a href="https://www.markdownguide.org/basic-syntax/">Markdown</a>.
 			</p>
 			<Box sx={boxStyles}>{renderTable()}</Box>
 		</PageContainer>
