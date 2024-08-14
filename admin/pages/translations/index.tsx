@@ -82,6 +82,22 @@ export default function TranslationsPage() {
 
 	return (
 		<PageContainer header={<Heading type="h3">Traducciones</Heading>}>
+			<p>
+				Puedes añadir algo de formato a las traducciones usando:
+				<ul>
+					<li>
+						<strong>**texto**</strong> para <strong>negrita</strong>
+					</li>
+					<li>
+						<strong>*texto*</strong> para <em>cursiva</em>
+					</li>
+					<li>
+						<strong>&lt;br&gt;</strong> para incluir un salto de línea
+					</li>
+				</ul>
+				Para más información consulta{' '}
+				<a href="https://www.markdownguide.org/basic-syntax/">Markdown</a>.
+			</p>
 			<Box sx={boxStyles}>{renderTable()}</Box>
 		</PageContainer>
 	);
