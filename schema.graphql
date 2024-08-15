@@ -455,6 +455,73 @@ input TranslationCreateInput {
   value: String
 }
 
+type Picture {
+  id: ID!
+  image: ImageFieldOutput
+  code: String
+  createdAt: DateTime
+}
+
+type ImageFieldOutput {
+  id: ID!
+  filesize: Int!
+  width: Int!
+  height: Int!
+  extension: ImageExtension!
+  url: String!
+}
+
+enum ImageExtension {
+  jpg
+  png
+  webp
+  gif
+}
+
+input PictureWhereUniqueInput {
+  id: ID
+  code: String
+}
+
+input PictureWhereInput {
+  AND: [PictureWhereInput!]
+  OR: [PictureWhereInput!]
+  NOT: [PictureWhereInput!]
+  id: IDFilter
+  code: StringFilter
+  createdAt: DateTimeNullableFilter
+}
+
+input PictureOrderByInput {
+  id: OrderDirection
+  code: OrderDirection
+  createdAt: OrderDirection
+}
+
+input PictureUpdateInput {
+  image: ImageFieldInput
+  code: String
+  createdAt: DateTime
+}
+
+input ImageFieldInput {
+  upload: Upload!
+}
+
+"""The `Upload` scalar type represents a file upload."""
+scalar Upload
+
+input PictureUpdateArgs {
+  where: PictureWhereUniqueInput!
+  data: PictureUpdateInput!
+}
+
+input PictureCreateInput {
+  image: ImageFieldInput
+  code: String
+  createdAt: DateTime
+}
+
 """
 The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
 """
@@ -485,6 +552,12 @@ type Mutation {
   updateTranslations(data: [TranslationUpdateArgs!]!): [Translation]
   deleteTranslation(where: TranslationWhereUniqueInput!): Translation
   deleteTranslations(where: [TranslationWhereUniqueInput!]!): [Translation]
+  createPicture(data: PictureCreateInput!): Picture
+  createPictures(data: [PictureCreateInput!]!): [Picture]
+  updatePicture(where: PictureWhereUniqueInput!, data: PictureUpdateInput!): Picture
+  updatePictures(data: [PictureUpdateArgs!]!): [Picture]
+  deletePicture(where: PictureWhereUniqueInput!): Picture
+  deletePictures(where: [PictureWhereUniqueInput!]!): [Picture]
   endSession: Boolean!
   authenticateUserWithPassword(email: String!, password: String!): UserAuthenticationWithPasswordResult
   createInitialUser(data: CreateInitialUserInput!): UserAuthenticationWithPasswordSuccess!
@@ -508,18 +581,21 @@ input CreateInitialUserInput {
 }
 
 type Query {
-  users(where: UserWhereInput! = {}, orderBy: [UserOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: UserWhereUniqueInput): [User!]
   user(where: UserWhereUniqueInput!): User
+  users(where: UserWhereInput! = {}, orderBy: [UserOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: UserWhereUniqueInput): [User!]
   usersCount(where: UserWhereInput! = {}): Int
-  configurations(where: ConfigurationWhereInput! = {}, orderBy: [ConfigurationOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ConfigurationWhereUniqueInput): [Configuration!]
   configuration(where: ConfigurationWhereUniqueInput!): Configuration
+  configurations(where: ConfigurationWhereInput! = {}, orderBy: [ConfigurationOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ConfigurationWhereUniqueInput): [Configuration!]
   configurationsCount(where: ConfigurationWhereInput! = {}): Int
-  languages(where: LanguageWhereInput! = {}, orderBy: [LanguageOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: LanguageWhereUniqueInput): [Language!]
   language(where: LanguageWhereUniqueInput!): Language
+  languages(where: LanguageWhereInput! = {}, orderBy: [LanguageOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: LanguageWhereUniqueInput): [Language!]
   languagesCount(where: LanguageWhereInput! = {}): Int
-  translations(where: TranslationWhereInput! = {}, orderBy: [TranslationOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: TranslationWhereUniqueInput): [Translation!]
   translation(where: TranslationWhereUniqueInput!): Translation
+  translations(where: TranslationWhereInput! = {}, orderBy: [TranslationOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: TranslationWhereUniqueInput): [Translation!]
   translationsCount(where: TranslationWhereInput! = {}): Int
+  picture(where: PictureWhereUniqueInput!): Picture
+  pictures(where: PictureWhereInput! = {}, orderBy: [PictureOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PictureWhereUniqueInput): [Picture!]
+  picturesCount(where: PictureWhereInput! = {}): Int
   keystone: KeystoneMeta!
   authenticatedItem: AuthenticatedItem
 }
@@ -551,6 +627,7 @@ type KeystoneAdminUIListMeta {
   labelField: String!
   fields: [KeystoneAdminUIFieldMeta!]!
   groups: [KeystoneAdminUIFieldGroupMeta!]!
+  graphql: KeystoneAdminUIGraphQL!
   initialSort: KeystoneAdminUISort
   isHidden: Boolean!
   isSingleton: Boolean!
@@ -616,6 +693,33 @@ type KeystoneAdminUIFieldGroupMeta {
   label: String!
   description: String
   fields: [KeystoneAdminUIFieldMeta!]!
+}
+
+type KeystoneAdminUIGraphQL {
+  names: KeystoneAdminUIGraphQLNames!
+}
+
+type KeystoneAdminUIGraphQLNames {
+  outputTypeName: String!
+  whereInputName: String!
+  whereUniqueInputName: String!
+  createInputName: String!
+  createMutationName: String!
+  createManyMutationName: String!
+  relateToOneForCreateInputName: String!
+  relateToManyForCreateInputName: String!
+  itemQueryName: String!
+  listOrderName: String!
+  listQueryCountName: String!
+  listQueryName: String!
+  updateInputName: String!
+  updateMutationName: String!
+  updateManyInputName: String!
+  updateManyMutationName: String!
+  relateToOneForUpdateInputName: String!
+  relateToManyForUpdateInputName: String!
+  deleteMutationName: String!
+  deleteManyMutationName: String!
 }
 
 type KeystoneAdminUISort {

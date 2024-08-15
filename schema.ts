@@ -1,6 +1,6 @@
 import { list } from '@keystone-6/core';
 
-import { text, password, timestamp, json, select, checkbox } from '@keystone-6/core/fields';
+import { text, password, timestamp, json, select, checkbox, image } from '@keystone-6/core/fields';
 
 import { allowAll } from '@keystone-6/core/access';
 
@@ -212,5 +212,40 @@ export const lists: Lists = {
 				defaultFieldMode: 'hidden'
 			}
 		}
+	}),
+
+	Picture: list({
+		access: {
+			operation: {
+				query: allowAll,
+				create: sessionExists,
+				update: sessionExists,
+				delete: sessionExists
+			}
+		},
+
+		ui: {
+			label: 'Imágenes',
+			singular: 'Imagen',
+			plural: 'Imágenes'
+		},
+
+		fields: {
+			image: image({ storage: 's3_image_storage' }),
+
+			code: text({
+				label: 'Código de la imagen',
+				isIndexed: 'unique',
+			}),
+
+			createdAt: timestamp({ 
+				defaultValue: { kind: 'now' }, 
+				ui: {
+					createView: { fieldMode: 'hidden' },
+					itemView: { fieldMode: 'read' },
+					listView: { fieldMode: 'read' }
+				}
+			})
+		},
 	})
 };
