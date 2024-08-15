@@ -17,5 +17,6 @@ FROM base
 COPY --from=prod-deps /app/node_modules /app/node_modules
 COPY --from=build /app/.keystone /app/.keystone
 RUN pnpm postinstall
+RUN pnpm exec keystone prisma migrate deploy
 EXPOSE 3000
 CMD [ "pnpm", "start" ]
