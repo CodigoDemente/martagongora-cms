@@ -19,4 +19,4 @@ COPY --from=build /app/.keystone /app/.keystone
 RUN pnpm postinstall
 RUN pnpm exec keystone prisma migrate deploy
 EXPOSE 3000
-CMD [ "pnpm", "start" ]
+ENTRYPOINT ["/bin/sh", "-c" , "pnpm exec keystone prisma migrate deploy && pnpm start"]
