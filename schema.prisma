@@ -45,6 +45,13 @@ model Translation {
   @@index([key])
 }
 
+model ContactRequest {
+  id      String    @id @default(uuid()) @postgresql.Uuid
+  from    String    @default("")
+  date    DateTime? @default(now())
+  message String    @default("")
+}
+
 model Picture {
   id              String    @id @default(uuid()) @postgresql.Uuid
   image_id        String?

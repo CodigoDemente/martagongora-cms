@@ -455,6 +455,51 @@ input TranslationCreateInput {
   value: String
 }
 
+type ContactRequest {
+  id: ID!
+  from: String
+  date: DateTime
+  message: String
+}
+
+input ContactRequestWhereUniqueInput {
+  id: ID
+}
+
+input ContactRequestWhereInput {
+  AND: [ContactRequestWhereInput!]
+  OR: [ContactRequestWhereInput!]
+  NOT: [ContactRequestWhereInput!]
+  id: IDFilter
+  from: StringFilter
+  date: DateTimeNullableFilter
+  message: StringFilter
+}
+
+input ContactRequestOrderByInput {
+  id: OrderDirection
+  from: OrderDirection
+  date: OrderDirection
+  message: OrderDirection
+}
+
+input ContactRequestUpdateInput {
+  from: String
+  date: DateTime
+  message: String
+}
+
+input ContactRequestUpdateArgs {
+  where: ContactRequestWhereUniqueInput!
+  data: ContactRequestUpdateInput!
+}
+
+input ContactRequestCreateInput {
+  from: String
+  date: DateTime
+  message: String
+}
+
 type Picture {
   id: ID!
   image: ImageFieldOutput
@@ -552,6 +597,12 @@ type Mutation {
   updateTranslations(data: [TranslationUpdateArgs!]!): [Translation]
   deleteTranslation(where: TranslationWhereUniqueInput!): Translation
   deleteTranslations(where: [TranslationWhereUniqueInput!]!): [Translation]
+  createContactRequest(data: ContactRequestCreateInput!): ContactRequest
+  createContactRequests(data: [ContactRequestCreateInput!]!): [ContactRequest]
+  updateContactRequest(where: ContactRequestWhereUniqueInput!, data: ContactRequestUpdateInput!): ContactRequest
+  updateContactRequests(data: [ContactRequestUpdateArgs!]!): [ContactRequest]
+  deleteContactRequest(where: ContactRequestWhereUniqueInput!): ContactRequest
+  deleteContactRequests(where: [ContactRequestWhereUniqueInput!]!): [ContactRequest]
   createPicture(data: PictureCreateInput!): Picture
   createPictures(data: [PictureCreateInput!]!): [Picture]
   updatePicture(where: PictureWhereUniqueInput!, data: PictureUpdateInput!): Picture
@@ -593,6 +644,9 @@ type Query {
   translation(where: TranslationWhereUniqueInput!): Translation
   translations(where: TranslationWhereInput! = {}, orderBy: [TranslationOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: TranslationWhereUniqueInput): [Translation!]
   translationsCount(where: TranslationWhereInput! = {}): Int
+  contactRequest(where: ContactRequestWhereUniqueInput!): ContactRequest
+  contactRequests(where: ContactRequestWhereInput! = {}, orderBy: [ContactRequestOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ContactRequestWhereUniqueInput): [ContactRequest!]
+  contactRequestsCount(where: ContactRequestWhereInput! = {}): Int
   picture(where: PictureWhereUniqueInput!): Picture
   pictures(where: PictureWhereInput! = {}, orderBy: [PictureOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PictureWhereUniqueInput): [Picture!]
   picturesCount(where: PictureWhereInput! = {}): Int

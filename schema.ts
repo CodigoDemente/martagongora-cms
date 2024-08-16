@@ -1,13 +1,10 @@
+import codes from 'iso-language-codes';
+import { allowAll } from '@keystone-6/core/access';
+import { checkbox, image, json, password, select, text, timestamp } from '@keystone-6/core/fields';
 import { list } from '@keystone-6/core';
 
-import { text, password, timestamp, json, select, checkbox, image } from '@keystone-6/core/fields';
-
-import { allowAll } from '@keystone-6/core/access';
-
-import codes from 'iso-language-codes';
-
-import type { Lists } from '.keystone/types';
 import validateHook from './server/hooks/Translations/validateHook';
+import type { Lists } from '.keystone/types';
 
 const sessionExists = ({ session }: { session?: unknown }) => {
 	return session !== undefined;
@@ -209,6 +206,37 @@ export const lists: Lists = {
 				defaultFieldMode: 'hidden'
 			},
 			itemView: {
+				defaultFieldMode: 'hidden'
+			}
+		}
+	}),
+
+	ContactRequest: list({
+		fields: {
+			from: text(),
+			date: timestamp({
+				defaultValue: { kind: 'now' }
+			}),
+			message: text(),
+		},
+		access: {
+			operation: {
+				query: sessionExists,
+				create: () => false,
+				update: () => false,
+				delete: () => false,
+			}
+		},
+		ui: {
+			label: 'Peticiones de contacto',
+			singular: 'Petición de contacto',
+			plural: 'Peticiones de contacto',
+			hideCreate: true,
+			hideDelete: true,
+			createView: {
+				defaultFieldMode: 'hidden'
+			},
+			listView: {
 				defaultFieldMode: 'hidden'
 			}
 		}
