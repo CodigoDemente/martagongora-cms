@@ -457,9 +457,8 @@ input TranslationCreateInput {
 
 type ContactRequest {
   id: ID!
-  from: String
   date: DateTime
-  message: String
+  data: String
 }
 
 input ContactRequestWhereUniqueInput {
@@ -471,22 +470,19 @@ input ContactRequestWhereInput {
   OR: [ContactRequestWhereInput!]
   NOT: [ContactRequestWhereInput!]
   id: IDFilter
-  from: StringFilter
   date: DateTimeNullableFilter
-  message: StringFilter
+  data: StringFilter
 }
 
 input ContactRequestOrderByInput {
   id: OrderDirection
-  from: OrderDirection
   date: OrderDirection
-  message: OrderDirection
+  data: OrderDirection
 }
 
 input ContactRequestUpdateInput {
-  from: String
   date: DateTime
-  message: String
+  data: String
 }
 
 input ContactRequestUpdateArgs {
@@ -495,9 +491,8 @@ input ContactRequestUpdateArgs {
 }
 
 input ContactRequestCreateInput {
-  from: String
   date: DateTime
-  message: String
+  data: String
 }
 
 type Picture {

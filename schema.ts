@@ -213,18 +213,27 @@ export const lists: Lists = {
 
 	ContactRequest: list({
 		fields: {
-			from: text(),
 			date: timestamp({
-				defaultValue: { kind: 'now' }
+				defaultValue: { kind: 'now' },
+				ui: {
+					itemView: { fieldMode: 'read' },
+					listView: { fieldMode: 'read' }
+				}
 			}),
-			message: text(),
+			data: text({
+				ui: {
+					displayMode: 'textarea',
+					itemView: { fieldMode: 'read' },
+					listView: { fieldMode: 'read' }
+				}
+			})
 		},
 		access: {
 			operation: {
 				query: sessionExists,
 				create: () => false,
 				update: () => false,
-				delete: () => false,
+				delete: () => false
 			}
 		},
 		ui: {
@@ -234,9 +243,6 @@ export const lists: Lists = {
 			hideCreate: true,
 			hideDelete: true,
 			createView: {
-				defaultFieldMode: 'hidden'
-			},
-			listView: {
 				defaultFieldMode: 'hidden'
 			}
 		}
@@ -263,17 +269,17 @@ export const lists: Lists = {
 
 			code: text({
 				label: 'Código de la imagen',
-				isIndexed: 'unique',
+				isIndexed: 'unique'
 			}),
 
-			createdAt: timestamp({ 
-				defaultValue: { kind: 'now' }, 
+			createdAt: timestamp({
+				defaultValue: { kind: 'now' },
 				ui: {
 					createView: { fieldMode: 'hidden' },
 					itemView: { fieldMode: 'read' },
 					listView: { fieldMode: 'read' }
 				}
 			})
-		},
+		}
 	})
 };

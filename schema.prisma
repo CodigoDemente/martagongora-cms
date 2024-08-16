@@ -46,10 +46,9 @@ model Translation {
 }
 
 model ContactRequest {
-  id      String    @id @default(uuid()) @postgresql.Uuid
-  from    String    @default("")
-  date    DateTime? @default(now())
-  message String    @default("")
+  id   String    @id @default(uuid()) @postgresql.Uuid
+  date DateTime? @default(now())
+  data String    @default("")
 }
 
 model Picture {

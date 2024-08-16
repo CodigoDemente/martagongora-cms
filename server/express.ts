@@ -1,6 +1,7 @@
 import pino from 'pino-http';
 import { BaseKeystoneTypeInfo, KeystoneContext } from '@keystone-6/core/types';
 import type { Express } from 'express';
+import { json } from 'body-parser';
 
 import configurationRouter from './routes/configuration/router';
 import emailRouter from './routes/email/router';
@@ -11,6 +12,8 @@ import { HandleErrors } from './middlewares/ErrorHandler';
 
 export default function expressApp(app: Express, context: KeystoneContext<BaseKeystoneTypeInfo>) {
 	app.use(pino());
+
+	app.use(json());
 
 	app.use('/configuration', configurationRouter(context));
 

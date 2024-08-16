@@ -1,27 +1,37 @@
-import { KeystoneContext } from "@keystone-6/core/types";
-import { NextFunction, Request, Response } from "express";
+import { KeystoneContext } from '@keystone-6/core/types';
+import { NextFunction, Request, Response } from 'express';
 
-import { EmailClient } from "../../clients/EmailClient";
-import { TranslationRepository } from "../../repositories/TranslationRepository";
+import { EmailClient } from '../../clients/EmailClient';
+import { TranslationRepository } from '../../repositories/TranslationRepository';
+import { ContactRequestRepository } from '../../repositories/ContactRequestRepository';
+import { CouldNotSendMail } from '../../errors/CouldNotSendMail';
+import { ContactFormData } from '../../types/email';
 
 export function sendEmail(commonContext: KeystoneContext) {
-  return async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const context = (await commonContext.withRequest(req, res)).sudo();
-      
-      const translationRepository = new TranslationRepository(context);
+	return async (req: Request, res: Response, next: NextFunction) => {
+		try {
+			const context = (await commonContext.withRequest(req, res)).sudo();
 
-      const formData = req.body;
+			const translationRepository = new TranslationRepository(context);
+			const contactRequestRepository = new ContactRequestRepository(context, translationRepository);
 
-      const client = new EmailClient(translationRepository);
+			const formData = req.body as ContactFormData;
 
-      const email = await client.buildContactEmail('Petición de información', formData);
+			await contactRequestRepository.createContactRequest(formData);
 
-      await client.sendEmail(email);
+			const client = new EmailClient(translationRepository);
 
-      res.status(200).send();
-    } catch (error) {
-      next(error);
-    }
-  };
+			const email = await client.buildContactEmail('Petición de información', formData);
+
+			const result = await client.sendEmail(email);
+
+			if (!result) {
+				throw new CouldNotSendMail();
+			}
+
+			res.status(200).send();
+		} catch (error) {
+			next(error);
+		}
+	};
 }
