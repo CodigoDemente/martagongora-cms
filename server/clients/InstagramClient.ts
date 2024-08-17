@@ -1,13 +1,14 @@
-import axios, { Axios } from 'axios';
 import Bluebird from 'bluebird';
+import axios, { Axios } from 'axios';
+
+import logger from '../Logger';
 import {
 	InstagramAPIMediaResponse,
 	InstagramCredentials,
 	InstagramMedia
-} from '../../server/types/instagram';
-import logger from '../../server/Logger';
-import { InvalidInstagramCode } from '../../server/errors/InvalidInstagramCode';
-import { InstagramNotAuthenticatedError } from '../../server/errors/InstagramNotAuthenticatedError';
+} from '../types/instagram';
+import { InstagramNotAuthenticatedError } from '../errors/InstagramNotAuthenticatedError';
+import { InvalidInstagramCode } from '../errors/InvalidInstagramCode';
 
 class InstagramClient {
 	private httpClient: Axios;
