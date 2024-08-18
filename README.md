@@ -52,7 +52,13 @@ Esto levanta la base de datos necesaria para el backend.
 
 Si la instancia de Postgres que vas a usar ya la tienes desplegada y no necesitas levantarla en Docker, sáltate este paso.
 
-Ahora solo queda ejecutar el proyecto ejecutando:
+El siguiente paso es instalar las dependencias:
+
+```shell
+pnpm install
+```
+
+Ahora solo queda ejecutar el proyecto lanzando el comand:
 
 ```shell
 pnpm dev
