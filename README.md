@@ -21,6 +21,7 @@ Copia el archivo [.env.example](.env.example), renómbralo a `.env` y cambia las
 
 | Variable name               | Description                                                                                      |
 | --------------------------- | ------------------------------------------------------------------------------------------------ |
+| PORT                        | Puerto en el que se va a desplegar la aplicación                                                 |
 | INSTAGRAM_CLIENT_ID         | ID de cliente de la aplicación para pedir fotos de Instagram                                     |
 | INSTAGRAM_CLIENT_SECRET     | Secreto de cliente de la aplicación para pedir fotos de Instagram                                |
 | INSTAGRAM_AUTH_REDIRECT_URI | URL de redirección al configurar las credenciales de la aplicación para pedir fotos de instagram |
