@@ -49,6 +49,10 @@ export default function TranslationsTable(props: TranslationsTableProps) {
 		if (params.reason === GridRowEditStopReasons.rowFocusOut) {
 			event.defaultMuiPrevented = true;
 		}
+
+		if (params.reason === GridRowEditStopReasons.enterKeyDown) {
+			event.defaultMuiPrevented = true;
+		}
 	};
 
 	return (

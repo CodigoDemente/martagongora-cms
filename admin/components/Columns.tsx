@@ -1,6 +1,7 @@
 import {
 	GridActionsCellItem,
 	GridColDef,
+	GridColTypeDef,
 	GridRowId,
 	GridRowModes,
 	GridRowParams
@@ -14,6 +15,7 @@ import { GetActionsProps, GetColumnsProps, Row, Translation } from '../lib/types
 import { handleRowDelete } from '../lib/handlers/RowDeleteHandler';
 import { DELETE_TRANSLATIONS } from '../graphql/mutations/DeleteTranslations';
 import { useMutation } from '@apollo/client';
+import EditTextarea from './EditTextArea';
 
 function getActions(props: GetActionsProps) {
 	const {
@@ -117,6 +119,11 @@ export function getColumns(props: GetColumnsProps): GridColDef[] {
 		setSnackbar
 	} = props;
 
+	const multilineColumn: GridColTypeDef = {
+		type: 'string',
+		renderEditCell: (params) => <EditTextarea {...params} />
+	};
+
 	const [deleteTranslations, { loading: deleteLoading }] = useMutation<{
 		deleteTranslations: Translation[];
 	}>(DELETE_TRANSLATIONS);
@@ -143,12 +150,13 @@ export function getColumns(props: GetColumnsProps): GridColDef[] {
 		...languages.map(
 			(language): GridColDef => ({
 				field: language.code,
-				editable: true,
 				headerName: `${language.code}${language.isDefault ? ' (por defecto)' : ''}`,
+				editable: true,
 				hideable: true,
 				sortable: false,
 				filterable: false,
-				flex: 1
+				flex: 1,
+				...multilineColumn
 			})
 		),
 		{
