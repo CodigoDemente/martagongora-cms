@@ -17,6 +17,7 @@ export type ContactFormData = {
 	instagram?: string;
 	known?: string;
 	tell_more: string;
+	terms: string;
 };
 
 type ContactEmailField = {
@@ -36,4 +37,5 @@ export type ContactEmailData = {
 	instagram: ContactEmailField;
 	known: ContactEmailField;
 	tell_more: ContactEmailField;
+	terms: ContactEmailField;
 };

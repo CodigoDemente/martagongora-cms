@@ -7,7 +7,7 @@ import { ContactRequestRepository } from '../../repositories/ContactRequestRepos
 import { CouldNotSendMail } from '../../errors/CouldNotSendMail';
 import { ContactFormData } from '../../types/email';
 
-export function sendEmail(commonContext: KeystoneContext) {
+export function createContactRequest(commonContext: KeystoneContext) {
 	return async (req: Request, res: Response, next: NextFunction) => {
 		try {
 			const context = (await commonContext.withRequest(req, res)).sudo();

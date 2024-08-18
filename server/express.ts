@@ -4,7 +4,7 @@ import type { Express } from 'express';
 import { json } from 'body-parser';
 
 import configurationRouter from './routes/configuration/router';
-import emailRouter from './routes/email/router';
+import contactRouter from './routes/contact/router';
 import instagramRouter from './routes/instagram/router';
 import languageRouter from './routes/language/router';
 import translationsRouter from './routes/translation/router';
@@ -23,7 +23,7 @@ export default function expressApp(app: Express, context: KeystoneContext<BaseKe
 
 	app.use('/translation', translationsRouter(context));
 
-	app.use('/contact', emailRouter(context));
+	app.use('/contact', contactRouter(context));
 
 	app.use(HandleErrors);
 }
