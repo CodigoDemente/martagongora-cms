@@ -59,6 +59,7 @@ model Picture {
   image_height    Int?
   image_extension String?
   code            String    @unique @default("")
+  alt             String    @default("")
   createdAt       DateTime? @default(now())
 }
 
