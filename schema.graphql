@@ -499,6 +499,7 @@ type Picture {
   id: ID!
   image: ImageFieldOutput
   code: String
+  alt: String
   createdAt: DateTime
 }
 
@@ -529,18 +530,21 @@ input PictureWhereInput {
   NOT: [PictureWhereInput!]
   id: IDFilter
   code: StringFilter
+  alt: StringFilter
   createdAt: DateTimeNullableFilter
 }
 
 input PictureOrderByInput {
   id: OrderDirection
   code: OrderDirection
+  alt: OrderDirection
   createdAt: OrderDirection
 }
 
 input PictureUpdateInput {
   image: ImageFieldInput
   code: String
+  alt: String
   createdAt: DateTime
 }
 
@@ -559,6 +563,7 @@ input PictureUpdateArgs {
 input PictureCreateInput {
   image: ImageFieldInput
   code: String
+  alt: String
   createdAt: DateTime
 }
 

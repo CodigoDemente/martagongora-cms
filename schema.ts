@@ -272,6 +272,13 @@ export const lists: Lists = {
 				isIndexed: 'unique'
 			}),
 
+			alt: text({
+				label: 'Texto alternativo',
+				validation: {
+					isRequired: true
+				}
+			}),
+
 			createdAt: timestamp({
 				defaultValue: { kind: 'now' },
 				ui: {
