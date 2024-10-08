@@ -1,4 +1,4 @@
-import codes from 'iso-language-codes';
+import codes, { by639_1 } from 'iso-language-codes';
 import { allowAll } from '@keystone-6/core/access';
 import { checkbox, image, json, password, select, text, timestamp } from '@keystone-6/core/fields';
 import { list } from '@keystone-6/core';
@@ -119,6 +119,20 @@ export const lists: Lists = {
 				label: 'Idioma'
 			}),
 
+			name: text({
+				ui: {
+					createView: { fieldMode: 'hidden' },
+					itemView: { fieldMode: 'read' },
+					listView: { fieldMode: 'hidden' }
+				},
+				graphql: {
+					omit: {
+						create: true,
+						update: true
+					}
+				}
+			}),
+
 			enabled: checkbox({
 				label: 'Habilitado'
 			}),
@@ -135,6 +149,18 @@ export const lists: Lists = {
 					listView: { fieldMode: 'read' }
 				}
 			})
+		},
+
+		hooks: {
+			resolveInput: ({ item, resolvedData }) => {
+				const code = (resolvedData.code || item?.code) as keyof typeof by639_1;
+				const name = by639_1[code]?.name;
+
+				return {
+					...resolvedData,
+					name
+				};
+			}
 		}
 	}),
 

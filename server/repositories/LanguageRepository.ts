@@ -27,12 +27,13 @@ export class LanguageRepository {
 					equals: true
 				}
 			},
-			query: 'id code isDefault'
+			query: 'id code name isDefault'
 		});
 
 		return languages.map((language) => ({
 			id: language.id,
 			code: language.code,
+			name: language.name,
 			isDefault: language.isDefault
 		}));
 	}
