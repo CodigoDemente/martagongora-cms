@@ -29,6 +29,7 @@ model Configuration {
 model Language {
   id        String           @id @default(uuid()) @postgresql.Uuid
   code      LanguageCodeType @unique
+  name      String           @default("")
   enabled   Boolean          @default(false)
   isDefault Boolean          @default(false)
   createdAt DateTime?        @default(now())

@@ -159,6 +159,7 @@ input ConfigurationCreateInput {
 type Language {
   id: ID!
   code: LanguageCodeType
+  name: String
   enabled: Boolean
   isDefault: Boolean
   createdAt: DateTime
@@ -362,6 +363,7 @@ input LanguageWhereInput {
   NOT: [LanguageWhereInput!]
   id: IDFilter
   code: LanguageCodeTypeNullableFilter
+  name: StringFilter
   enabled: BooleanFilter
   isDefault: BooleanFilter
   createdAt: DateTimeNullableFilter
@@ -382,6 +384,7 @@ input BooleanFilter {
 input LanguageOrderByInput {
   id: OrderDirection
   code: OrderDirection
+  name: OrderDirection
   enabled: OrderDirection
   isDefault: OrderDirection
   createdAt: OrderDirection
