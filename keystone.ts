@@ -41,7 +41,7 @@ export default withAuth(
 				region: process.env.S3_REGION || '',
 				accessKeyId: process.env.AWS_ACCESS_KEY_ID || '',
 				secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || '',
-				signed: { expiry: 3600 }
+				signed: { expiry: 60 * 60 * 2 } // 2 hours
 			}
 		}
 	})

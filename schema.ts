@@ -51,7 +51,7 @@ export const lists: Lists = {
 					isRequired: true,
 					length: { min: 8 },
 					match: {
-						regex: /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,}$/,
+						regex: /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[.#?!@$ %^&*-]).{8,}$/,
 						explanation:
 							'Password must contain at least 8 characters, one uppercase, one lowercase, one number and one special character'
 					}
