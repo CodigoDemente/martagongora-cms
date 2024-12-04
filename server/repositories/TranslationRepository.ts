@@ -12,7 +12,10 @@ export class TranslationRepository {
 					equals: language
 				}
 			},
-			query: 'id language key value'
+			query: 'id language key value',
+			orderBy: {
+				key: 'asc'
+			}
 		})) as DatabaseTranslation[];
 
 		return TranslationMapper.toDomain(data);
