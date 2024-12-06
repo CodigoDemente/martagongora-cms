@@ -8,7 +8,7 @@ import { Heading, Link } from '@keystone-ui/core';
 import { Button } from '@keystone-ui/button';
 import { useState, useEffect } from 'react';
 
-const instagramAuthUrl = `https://api.instagram.com/oauth/authorize?client_id=371932638864920&redirect_uri=https://localhost:3000/instagram/auth&scope=user_profile,user_media&response_type=code`;
+const instagramAuthUrl = `https://www.instagram.com/oauth/authorize?enable_fb_login=0&force_authentication=0&client_id=1111517720383404&redirect_uri=https://backoffice.martagongora.com/instagram/auth&response_type=code&scope=instagram_business_basic`;
 
 type InstagramButtonProps = {
 	configExists: boolean;

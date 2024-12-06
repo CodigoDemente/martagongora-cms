@@ -14,11 +14,13 @@ export function handleInstagramAuth(commonContext: KeystoneContext) {
 
 			Logger.debug('Instagram code received');
 
-			const code = req.query.code;
+			const rawCode = req.query.code as string;
+
+			const code = rawCode.slice(0, rawCode.lastIndexOf('#'));
 
 			const client = InstagramClient;
 
-			const { userId, accessToken, expiresAt } = await client.performAuthentication(code as string);
+			const { userId, accessToken, expiresAt } = await client.performAuthentication(code);
 
 			Logger.debug('Instagram access token retrieved');
 

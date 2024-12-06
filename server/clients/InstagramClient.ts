@@ -55,13 +55,6 @@ class InstagramClient {
 		accessToken: string;
 		expiresAt: Date;
 	}> {
-		const data = new FormData();
-
-		data.append('client_id', process.env.INSTAGRAM_CLIENT_ID || '');
-		data.append('client_secret', process.env.INSTAGRAM_CLIENT_SECRET || '');
-		data.append('grant_type', 'ig_exchange_token');
-		data.append('access_token', shortLivedAccessToken);
-
 		const response = await axios.get('https://graph.instagram.com/access_token', {
 			params: {
 				grant_type: 'ig_exchange_token',
@@ -105,7 +98,7 @@ class InstagramClient {
 		};
 
 		this.graphHttpClient = axios.create({
-			baseURL: 'https://graph.instagram.com/v20.0',
+			baseURL: 'https://graph.instagram.com',
 			headers: {
 				Accept: 'application/json'
 			},
