@@ -37,6 +37,8 @@ class InstagramClient {
 		data.append('redirect_uri', process.env.INSTAGRAM_AUTH_REDIRECT_URI || '');
 		data.append('code', code);
 
+		logger.debug(data, 'Getting short lived access token with data');
+
 		const respone = await this.httpClient.request({
 			method: 'POST',
 			url: '/oauth/access_token',
