@@ -14,9 +14,7 @@ export function handleInstagramAuth(commonContext: KeystoneContext) {
 
 			Logger.debug('Instagram code received');
 
-			const rawCode = req.query.code as string;
-
-			const code = rawCode.slice(0, rawCode.lastIndexOf('#'));
+			const code = req.query.code as string;
 
 			const client = InstagramClient;
 

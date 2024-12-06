@@ -29,28 +29,27 @@ class InstagramClient {
 		accessToken: string;
 		userId: string;
 	}> {
-		const data = new FormData();
+		logger.debug('Getting short lived access token with data');
 
-		data.append('client_id', process.env.INSTAGRAM_CLIENT_ID || '');
-		data.append('client_secret', process.env.INSTAGRAM_CLIENT_SECRET || '');
-		data.append('grant_type', 'authorization_code');
-		data.append('redirect_uri', process.env.INSTAGRAM_AUTH_REDIRECT_URI || '');
-		data.append('code', code);
+		try {
+			const response = await this.httpClient.postForm('/oauth/access_token', {
+				client_id: process.env.INSTAGRAM_CLIENT_ID,
+				client_secret: process.env.INSTAGRAM_CLIENT_SECRET,
+				grant_type: 'authorization_code',
+				redirect_uri: process.env.INSTAGRAM_AUTH_REDIRECT_URI,
+				code
+			});
 
-		logger.debug(data, 'Getting short lived access token with data');
+			const { access_token, user_id } = response.data;
 
-		const respone = await this.httpClient.request({
-			method: 'POST',
-			url: '/oauth/access_token',
-			data
-		});
-
-		const { access_token, user_id } = respone.data;
-
-		return {
-			accessToken: access_token,
-			userId: user_id
-		};
+			return {
+				accessToken: access_token,
+				userId: user_id
+			};
+		} catch (error) {
+			logger.error(error, 'Failed to get short lived access token');
+			throw error;
+		}
 	}
 
 	private async getLongLivedAccessToken(shortLivedAccessToken: string): Promise<{
