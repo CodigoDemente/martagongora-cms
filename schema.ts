@@ -259,7 +259,7 @@ export const lists: Lists = {
 				query: sessionExists,
 				create: () => false,
 				update: () => false,
-				delete: () => false
+				delete: sessionExists
 			}
 		},
 		ui: {
