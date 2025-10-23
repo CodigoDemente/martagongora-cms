@@ -47,6 +47,19 @@ export class EmailClient {
 
 	public async sendEmail(email: Email): Promise<boolean> {
 		try {
+			Logger.info(
+				{
+					host: process.env.SMTP_HOST,
+					port: Number(process.env.SMTP_PORT),
+					secure: true,
+					auth: {
+						user: process.env.SMTP_USER,
+						pass: '*************'
+					}
+				},
+				'SMTP transport configuration'
+			);
+
 			const res = await this.transporter.sendMail({
 				from: process.env.SMTP_USER,
 				to: email.to,
