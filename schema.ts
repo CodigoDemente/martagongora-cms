@@ -267,9 +267,14 @@ export const lists: Lists = {
 			singular: 'Petición de contacto',
 			plural: 'Peticiones de contacto',
 			hideCreate: true,
-			hideDelete: true,
 			createView: {
 				defaultFieldMode: 'hidden'
+			},
+			listView: {
+				initialSort: {
+					field: 'date',
+					direction: 'DESC'
+				}
 			}
 		}
 	}),
