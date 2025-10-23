@@ -24,6 +24,19 @@ export class EmailClient {
 			}
 		});
 
+		Logger.info(
+			{
+				host: process.env.SMTP_HOST,
+				port: Number(process.env.SMTP_PORT),
+				secure: true,
+				auth: {
+					user: process.env.SMTP_USER,
+					pass: '*************'
+				}
+			},
+			'SMTP transport configuration'
+		);
+
 		const template = readFileSync(
 			resolve(join(process.cwd(), 'server/views/emails', 'ContactRequest.hbs')),
 			'utf-8'
