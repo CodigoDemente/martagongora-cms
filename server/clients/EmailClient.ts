@@ -1,41 +1,28 @@
 import Handlebars from 'handlebars';
-import { Transporter, createTransport } from 'nodemailer';
 import { join, resolve } from 'path';
 import { readFileSync } from 'fs';
+import Mailgun from 'mailgun.js';
+import formData from 'form-data';
 
 import { ContactEmailData, ContactFormData, Email } from '../types/email';
 import { Translation } from '../types/translation';
 import { TranslationRepository } from '../repositories/TranslationRepository';
 import Logger from '../Logger';
-import SMTPTransport from 'nodemailer/lib/smtp-transport';
+import type { Interfaces } from 'mailgun.js/definitions';
 
 export class EmailClient {
-	private transporter: Transporter<SMTPTransport.SentMessageInfo>;
+	private mailgun: Mailgun;
+	private mailgunClient: Interfaces.IMailgunClient;
 	private contactTemplate: HandlebarsTemplateDelegate<ContactEmailData>;
 
 	constructor(private readonly translationRepository: TranslationRepository) {
-		this.transporter = createTransport({
-			host: process.env.SMTP_HOST,
-			port: Number(process.env.SMTP_PORT),
-			secure: true,
-			auth: {
-				user: process.env.SMTP_USER,
-				pass: process.env.SMTP_PASSWORD
-			}
-		});
+		this.mailgun = new Mailgun(formData);
 
-		Logger.info(
-			{
-				host: process.env.SMTP_HOST,
-				port: Number(process.env.SMTP_PORT),
-				secure: true,
-				auth: {
-					user: process.env.SMTP_USER,
-					pass: '*************'
-				}
-			},
-			'SMTP transport configuration'
-		);
+		this.mailgunClient = this.mailgun.client({
+			username: 'api',
+			key: process.env.MAILGUN_API_KEY!,
+			url: 'https://api.eu.mailgun.net'
+		});
 
 		const template = readFileSync(
 			resolve(join(process.cwd(), 'server/views/emails', 'ContactRequest.hbs')),
@@ -47,21 +34,8 @@ export class EmailClient {
 
 	public async sendEmail(email: Email): Promise<boolean> {
 		try {
-			Logger.info(
-				{
-					host: process.env.SMTP_HOST,
-					port: Number(process.env.SMTP_PORT),
-					secure: true,
-					auth: {
-						user: process.env.SMTP_USER,
-						pass: '*************'
-					}
-				},
-				'SMTP transport configuration'
-			);
-
-			const res = await this.transporter.sendMail({
-				from: process.env.SMTP_USER,
+			const res = await this.mailgunClient.messages.create(process.env.MAILGUN_DOMAIN!, {
+				from: process.env.MAILGUN_MAIL!,
 				to: email.to,
 				subject: email.subject,
 				html: email.body
@@ -69,10 +43,12 @@ export class EmailClient {
 
 			Logger.info(
 				{
-					from: process.env.SMTP_USER,
+					from: process.env.MAILGUN_MAIL!,
 					to: email.to,
-					messageId: res.messageId,
-					response: res.response
+					messageId: res.id,
+					message: res.message,
+					status: res.status,
+					response: res.details
 				},
 				'Email sent'
 			);
