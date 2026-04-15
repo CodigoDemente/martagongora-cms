@@ -4,7 +4,7 @@ import { readFileSync } from 'fs';
 import Mailgun from 'mailgun.js';
 import formData from 'form-data';
 
-import { ContactEmailData, ContactFormData, Email } from '../types/email';
+import { ContactEmailData, Email, StoredContactFormData } from '../types/email';
 import { Translation } from '../types/translation';
 import { TranslationRepository } from '../repositories/TranslationRepository';
 import Logger from '../Logger';
@@ -61,7 +61,7 @@ export class EmailClient {
 		}
 	}
 
-	public async buildContactEmail(subject: string, data: ContactFormData): Promise<Email> {
+	public async buildContactEmail(subject: string, data: StoredContactFormData): Promise<Email> {
 		const translations = await this.translationRepository.getTranslations('es');
 
 		const emailData = Object.fromEntries(

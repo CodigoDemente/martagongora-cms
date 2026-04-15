@@ -5,33 +5,46 @@ import { EmailClient } from '../../clients/EmailClient';
 import { TranslationRepository } from '../../repositories/TranslationRepository';
 import { ContactRequestRepository } from '../../repositories/ContactRequestRepository';
 import { CouldNotSendMail } from '../../errors/CouldNotSendMail';
+import { InvalidRecaptchaError } from '../../errors/InvalidRecaptchaError';
+import { verifyRecaptchaToken } from '../../lib/verifyRecaptchaToken';
 import { ContactFormData } from '../../types/email';
 import Logger from '../../Logger';
 
 export function createContactRequest(commonContext: KeystoneContext) {
 	return async (req: Request, res: Response, next: NextFunction) => {
 		try {
-			Logger.info(
-				{
-					body: req.body
-				},
-				'Contact request received'
-			);
+			const formData = req.body as ContactFormData;
+
+			const remoteIp =
+				(typeof req.headers['x-forwarded-for'] === 'string'
+					? req.headers['x-forwarded-for'].split(',')[0]?.trim()
+					: undefined) || req.socket.remoteAddress;
+
+			if (
+				!(await verifyRecaptchaToken(formData.recaptcha_token, {
+					remoteIp,
+					userAgent: req.get('user-agent') ?? undefined
+				}))
+			) {
+				throw new InvalidRecaptchaError();
+			}
+
+			const { recaptcha_token, ...storedFormData } = formData;
+
+			Logger.info({ body: storedFormData }, 'Contact request received');
 
 			const context = (await commonContext.withRequest(req, res)).sudo();
 
 			const translationRepository = new TranslationRepository(context);
 			const contactRequestRepository = new ContactRequestRepository(context, translationRepository);
 
-			const formData = req.body as ContactFormData;
-
-			await contactRequestRepository.createContactRequest(formData);
+			await contactRequestRepository.createContactRequest(storedFormData);
 
 			const client = new EmailClient(translationRepository);
 
 			Logger.info({}, 'Email client created');
 
-			const email = await client.buildContactEmail('Petición de información', formData);
+			const email = await client.buildContactEmail('Petición de información', storedFormData);
 
 			Logger.info(
 				{
