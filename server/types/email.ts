@@ -18,7 +18,10 @@ export type ContactFormData = {
 	known?: string;
 	tell_more: string;
 	terms: string;
+	recaptcha_token: string;
 };
+
+export type StoredContactFormData = Omit<ContactFormData, 'recaptcha_token'>;
 
 type ContactEmailField = {
 	key: string;
